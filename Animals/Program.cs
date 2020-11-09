@@ -2,12 +2,12 @@
 
 namespace Animals
 {
-  public  class SatrtUp
+  public  class Program
     {
         static void Main(string[] args)
         {
-            Animal cat = new Cat("Pesho", "Whiskas");
-            Animal dog = new Dog("Gosho", "Meat");
+            Animals cat = new Cat("Pesho", "Whiskas");
+            Animals dog = new Dog("Gosho", "Meat");
 
             Console.WriteLine(cat.ExplainSelf());
             Console.WriteLine(dog.ExplainSelf());

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Animals
 {
-    public class Cat : Animal
+    public class Cat : Animals
     {
         public Cat(string name, string food) : base(name, food)
         {
