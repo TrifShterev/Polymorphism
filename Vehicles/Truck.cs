@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+
+using System;
 
 namespace Vehicles
 {
   public  class Truck:Vehicle
     {
-       
-        
-        public Truck(double quantity, double liters)
-            :base(quantity,liters+1.6)
+
+        public Truck(double fuelQuantity, double fuelConsumptionLitersPerKm, double tankCapacity)
+             : base(fuelQuantity, fuelConsumptionLitersPerKm, tankCapacity)
         {
-            
+            TankCapacity = tankCapacity;
+            FuelQuantity = fuelQuantity;
+            FuelConsumptionLitersPerKm = fuelConsumptionLitersPerKm;
         }
 
-        public override void Refueling(double liters)
-        {
-            FuelQuantity += liters*0.95;
-        }
+        protected override double AfterLeakage { get; set; } = 0.95;
+
+        protected override double AirConditioning { get; set; } = 1.6;
 
     }
 }

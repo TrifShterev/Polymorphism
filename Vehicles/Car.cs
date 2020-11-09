@@ -1,21 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 
 namespace Vehicles
 {
   public  class Car:Vehicle
     {
 
-        
-        public Car(double quantity, double liters)
-            :base(quantity,liters+0.9)
+
+        public Car(double fuelQuantity, double fuelConsumptionLitersPerKm, double tankCapacity)
+              : base(fuelQuantity, fuelConsumptionLitersPerKm, tankCapacity)
         {
-            
+            TankCapacity = tankCapacity;
+            FuelQuantity = fuelQuantity;
+            FuelConsumptionLitersPerKm = fuelConsumptionLitersPerKm;
         }
-       
-     
-       
+
+        protected override double AirConditioning { get; set; } = 0.9;
+
+
     }
 }
 

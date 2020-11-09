@@ -4,41 +4,87 @@ using System.Text;
 
 namespace Vehicles
 {
-   public class Vehicle
+   public abstract class Vehicle: IVehicle
     {
-        
-       
-        private double fuelConsumption;
-        public Vehicle(double quantity, double liters)
-        {
-            FuelQuantity = quantity;
-            fuelConsumption = liters;
-        }
-        public double FuelQuantity { get; set; }
-        public virtual void Drive(double distance)
-        {
+        private double fuelQuantity;
 
-            var fuel = this.FuelQuantity;
-            this.FuelQuantity -= (this.fuelConsumption) * distance;
-            if (this.FuelQuantity > 0)
+        public Vehicle(double fuelQuantity, double fuelConsumptionLitersPerKm, double tankCapacity)
+        {
+            TankCapacity = tankCapacity;
+            FuelQuantity = fuelQuantity;
+            FuelConsumptionLitersPerKm = fuelConsumptionLitersPerKm;
+        }
+
+        public double FuelQuantity
+        {
+            get => fuelQuantity;
+            set
             {
-                Console.WriteLine($"{this.GetType()} travelled {distance} km");
+                if (value <= TankCapacity)
+                {
+                    fuelQuantity = value;
+                }
+                else if (value <= 0)
+                {
+                    Console.WriteLine("Fuel must be a positive number");
+                }
+            }
+        }
+
+        public double FuelConsumptionLitersPerKm { get; set; }
+
+        public double TankCapacity { get; set; }
+
+        protected virtual double AfterLeakage { get; set; } = 1;
+
+        protected virtual double AirConditioning { get; set; } = 0;
+
+        public void Drive(double distance, bool airConditioning)
+        {
+            double distanceConsumption;
+
+            if (airConditioning)
+            {
+                distanceConsumption = (AirConditioning + FuelConsumptionLitersPerKm) * distance;
             }
             else
             {
-                this.FuelQuantity = fuel;
-                Console.WriteLine($"{this.GetType()} needs refueling");
+                distanceConsumption = FuelConsumptionLitersPerKm * distance;
             }
 
+            if (FuelQuantity >= distanceConsumption)
+            {
+                FuelQuantity -= distanceConsumption;
+
+                Console.WriteLine($"{GetType().Name} travelled {distance} km");
+            }
+            else
+            {
+                Console.WriteLine($"{GetType().Name} needs refueling");
+            }
         }
-        public virtual void Refueling(double liters)
+
+        public void Refueled(double liters)
         {
-            FuelQuantity += liters;
+            if (liters + fuelQuantity > TankCapacity)
+            {
+                Console.WriteLine($"Cannot fit {liters} fuel in the tank");
+            }
+            else if (liters <= 0)
+            {
+                Console.WriteLine("Fuel must be a positive number");
+            }
+            else
+            {
+                fuelQuantity += liters * AfterLeakage;
+            }
         }
 
         public override string ToString()
         {
-            return $"{this.GetType()}: {this.FuelQuantity:f2}";
+            double result = Math.Round(FuelQuantity, 2);
+
+            return $"{GetType().Name}: {result:f2}".Trim();
         }
     }
 }

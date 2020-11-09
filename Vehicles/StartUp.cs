@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Vehicles
 {
@@ -7,46 +9,53 @@ namespace Vehicles
     {
        public static void Main(string[] args)
         {
-            var inputCar = Console.ReadLine().Split();
-            Car car = new Car(double.Parse(inputCar[1]), double.Parse(inputCar[2]));
-            var inputTruck = Console.ReadLine().Split();
-            Truck truck = new Truck(double.Parse(inputTruck[1]), double.Parse(inputTruck[2]));
+            string[] command = Console.ReadLine()
+                 .Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            var car = new Car(double.Parse(command[1]),
+                              double.Parse(command[2]),
+                              double.Parse(command[3]));
 
-            int n = int.Parse(Console.ReadLine());
+            command = Console.ReadLine()
+               .Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            var truck = new Truck(double.Parse(command[1]),
+                                  double.Parse(command[2]),
+                                  double.Parse(command[3]));
 
-            for (int i = 0; i < n; i++)
+            command = Console.ReadLine()
+                .Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            var bus = new Bus(double.Parse(command[1]),
+                              double.Parse(command[2]),
+                              double.Parse(command[3]));
+
+            int numCommand = int.Parse(Console.ReadLine());
+
+            var vehicles = new Dictionary<string, IVehicle>() { { "Car", car }, { "Truck", truck }, { "Bus", bus } };
+
+            for (int i = 0; i < numCommand; i++)
             {
-                var input = Console.ReadLine().Split();
-                var vehicle = input[1];
-                var amount = double.Parse(input[2]);
+                command = Console.ReadLine()
+                    .Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
-                if (input[0]=="Drive")
+                string action = command[0];
+                string vehicle = command[1];
+                double value = double.Parse(command[2]);
+
+                if (action == "Drive")
                 {
-                    if (vehicle=="Car")
-                    {
-                        car.Drive(amount);
-                    }
-                    else if (vehicle=="Truck")
-                    {
-                        truck.Drive(amount);
-                    }
-
+                    vehicles[vehicle].Drive(value, true);
                 }
-                else if (input[0]=="Refuel")
+                else if (action == "Refuel")
                 {
-                    if (vehicle == "Car")
-                    {
-                        car.Refueling(amount);
-                    }
-                    else if (vehicle == "Truck")
-                    {
-                        truck.Refueling(amount);
-                    }
+                    vehicles[vehicle].Refueled(value);
                 }
-
+                else if (action == "DriveEmpty")
+                {
+                    vehicles[vehicle].Drive(value, false);
+                }
             }
-            Console.WriteLine(car.ToString());
-            Console.WriteLine(truck.ToString());
+
+            Console.WriteLine(string.Join(Environment.NewLine, vehicles.Values));
+
         }
     }
 }
